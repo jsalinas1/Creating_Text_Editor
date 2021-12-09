@@ -42,7 +42,7 @@ enum editorHighlight{
     HL_NORMAL = 0,
     HL_NUMBER,
     HL_MATCH
-}
+};
 
 /** data **/
 
@@ -290,11 +290,6 @@ void editorInsertRow(int at, char *s, size_t len){
     E.dirty++;
 }
 
-void editorFreeRow(erow *row){
-    free(row->render);
-    free(row->chars);
-    free(row->hl);
-}
 
 void editorAppendRow(char *s, size_t len){
     E.row = realloc(E.row, sizeof(erow) * (E.numrows + 1));
@@ -316,6 +311,7 @@ void editorAppendRow(char *s, size_t len){
 void editorFreeRow(erow *row){
     free(row->render);
     free(row->chars);
+    free(row->hl);
 }
 
 void editorDelRow(int at){
@@ -879,7 +875,7 @@ void initEditor(){
     E.statusmsg[0] = '\0';
     E.statusmsg_time = 0;
 
-    if(getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowSize)");
+    if(getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowSize");
     E.screenrows -= 2;
 }
 
