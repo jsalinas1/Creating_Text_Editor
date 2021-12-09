@@ -26,7 +26,7 @@
 #define CTRL_KEY(k) ((k) & 0x1f)
 
 enum editorKey{
-    BACKSPACE = 127;
+    BACKSPACE = 127,
     ARROW_LEFT = 1000,
     ARROW_RIGHT,
     ARROW_UP,
@@ -500,7 +500,7 @@ void editorDrawRows(struct abuf *ab){
 void editorDrawStatusBar(struct abuf *ab){
     abAppend(ab, "\x1b[7m", 4);
     char status[80], rstatus[80];
-    int len = snprintf(status, sizeof(status), "%.20s - %d lines",
+    int len = snprintf(status, sizeof(status), "%.20s - %d lines %s",
                         E.filename ? E.filename : "[No Name]", E.numrows,
                         E.dirty ? "(modified)" : "");
     int rlen = snprintf(rstatus, sizeof(rstatus), "%d/%d",
@@ -671,7 +671,7 @@ void editorProcessKeypress(){
             break;
 
         case BACKSPACE:
-        case CTRL_KEY:
+        case CTRL_KEY('h'):
         case DEL_KEY:
             if(c == DEL_KEY) editorMoveCursor(ARROW_RIGHT);
             editorDelChar();
@@ -698,7 +698,7 @@ void editorProcessKeypress(){
         case ARROW_RIGHT:
             editorMoveCursor(c);
             break;
-        case CTRL_KEY('l');
+        case CTRL_KEY('l'):
         case '\x1b':
             break;
         
