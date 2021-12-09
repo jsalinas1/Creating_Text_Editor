@@ -201,7 +201,6 @@ void editorUpdateRow(erow *row){
     free(row->render);
     row->render = malloc(row->size + tabs*(KILO_TAB_STOP - 1) + 1);
 
-    int j;
     int idx = 0;
     for(j = 0; j < row->size; j++){
         if(row->chars[j] == '\t'){
@@ -400,7 +399,7 @@ void editorSetStatusMessage(const char *fmt, ...){
 /** input **/
 
 void editorMoveCursor(int key){
-    error *row = (E.cy >= E.numrows) ? NULL : &E.row[E.cy];
+    erow *row = (E.cy >= E.numrows) ? NULL : &E.row[E.cy];
 
     switch(key){
         case ARROW_LEFT:
@@ -460,7 +459,7 @@ void editorProcessKeypress(){
         case PAGE_DOWN:{
             if(c == PAGE_UP)
                 E.cy = E.rowoff;
-            else if(C == PAGE_DOWN){
+            else if(c == PAGE_DOWN){
                 E.cy = E.rowoff + E.screenrows - 1;
                 if(E.cy > E.numrows) E.cy = E.numrows;
             }
