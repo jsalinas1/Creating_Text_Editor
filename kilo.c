@@ -154,8 +154,9 @@ void enableRawMode(){
 int editorReadKey(){
     int nread;
     char c;
-    while((nread = read(STDIN_FILENO, &c, 1)) != 1)
+    while((nread = read(STDIN_FILENO, &c, 1)) != 1){
         if(nread == -1 && errno != EAGAIN) die("read");
+    }
     
 
     if(c == '\x1b'){
@@ -388,7 +389,21 @@ void editorSelectSyntaxHighlight(){
         struct editorSyntax *s = &HLDB[j];
         unsigned int i = 0;
         while(s->filematch[i]){
-            int is_ext = (s->filematch[i][0] == '.');
+            char *p = strstr(E.filename, s->filematch[i]);
+            if(p != NULL){
+                int patlen = strlen(s->filematch[i]);
+                if(s->filematch[i][0] != '.' || p[patlen] == '\0'){
+                    E.syntax = s;
+
+                    int filerow;
+                    for(filerow = 0; filerow < E.numrows; filerow++){
+                        editorUpdateSyntax(&E.row[filerow]);
+                    }
+
+                    return;
+                }
+            }
+           /* int is_ext = (s->filematch[i][0] == '.');
             if((is_ext && ext && !strcmp(ext, s->filematch[i])) || 
                 (!is_ext && strstr(E.filename, s->filematch[i]))){
                 E.syntax = s;
@@ -399,7 +414,7 @@ void editorSelectSyntaxHighlight(){
                 }
 
                 return;
-            }
+            }*/
             i++;
         }
     }
@@ -447,7 +462,7 @@ void editorUpdateRow(erow *row){
             row->render[idx++] = ' ';
             while(idx % KILO_TAB_STOP != 0) row->render[idx++] = ' ';
         }else{
-        row->render[idx++] = row->chars[j];
+            row->render[idx++] = row->chars[j];
         }
     }
 
@@ -483,7 +498,7 @@ void editorInsertRow(int at, char *s, size_t len){
 }
 
 
-void editorAppendRow(char *s, size_t len){
+/*void editorAppendRow(char *s, size_t len){
     E.row = realloc(E.row, sizeof(erow) * (E.numrows + 1));
     
     int at = E.numrows;
@@ -498,7 +513,7 @@ void editorAppendRow(char *s, size_t len){
 
     E.numrows++;
     E.dirty++;
-}
+}*/
 
 void editorFreeRow(erow *row){
     free(row->render);
@@ -574,7 +589,7 @@ void editorDelChar(){
     erow *row = &E.row[E.cy];
     if(E.cx > 0){
         editorRowDelChar(row, E.cx - 1);
-        E.cx;
+        E.cx--;
     } else {
         E.cx = E.row[E.cy - 1].size;
         editorRowAppendString(&E.row[E.cy - 1], row->chars, row->size);
