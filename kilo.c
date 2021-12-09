@@ -693,8 +693,11 @@ void editorFindCallback(char *query, int key){
     }
 
 
-    if(key == '\r' || key == '\x1b')
+    if(key == '\r' || key == '\x1b'){
+        last_match = -1;
+        direction = 1;
         return;
+    }
     else if(key == ARROW_RIGHT || key == ARROW_DOWN)
         direction = 1;
     else if(key == ARROW_LEFT || key == ARROW_UP)
@@ -840,6 +843,7 @@ void editorDrawRows(struct abuf *ab){
                         abAppend(ab, "\x1b[39m", 5);
                         current_color = -1;
                     }
+                    abAppend(ab, &c[j], 1);
                 }else{
                     int color = editorSyntaxToColor(hl[j]);
 
