@@ -49,8 +49,8 @@ enum editorHighlight{
     HL_MATCH
 };
 
-#define HL_HIGHLIGHT_NUMBERS (1 << 0)
-#define HL_HIGHLIGHT_STRINGS (1 << 1)
+#define HL_HIGHLIGHT_NUMBERS (1<<0)
+#define HL_HIGHLIGHT_STRINGS (1<<1)
 
 /** data **/
 
@@ -101,7 +101,7 @@ char *C_HL_keywords[] = {
 
     "int|", "long|", "double|", "float|", "char|", "unsigned|", "signed|",
     "void|", NULL
-}
+};
 
 struct editorSyntax HLDB[] = {
     {
@@ -305,7 +305,7 @@ void editorUpdateSyntax(erow *row){
                 if(c == '\\' && i + 1 < row->rsize){
                     row->hl[i+1] = HL_STRING;
                     i += 2;
-                    continue
+                    continue;
                 }
                 if(c == in_string) in_string = 0;
                 i++;
@@ -321,7 +321,7 @@ void editorUpdateSyntax(erow *row){
                 }
             }
             
-            }
+            
         }
 
         if(E.syntax->flags & HL_HIGHLIGHT_NUMBERS){
@@ -367,7 +367,7 @@ void editorUpdateSyntax(erow *row){
 int editorSyntaxToColor(int hl){
     switch(hl){
         case HL_COMMENT:
-        case HL_MLCOMMENT: return 36
+        case HL_MLCOMMENT: return 36;
         case HL_KEYWORD1: return 33;
         case HL_KEYWORD2: return 32;
         case HL_STRING: return 35;
