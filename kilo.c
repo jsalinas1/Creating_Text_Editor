@@ -189,9 +189,9 @@ void editorDrawRows(struct abuf *ab){
                 "KILO editor -- version %s", KILO_VERSION);
             if(welcomelen > E.screencols) welcomelen = E.screencols;
             abAppend(ab, welcome, welcomelen);
-            else
-                abAppend(ab, "~", 1);
-        }
+            
+        }else
+            abAppend(ab, "~", 1);
 
         abAppend(ab, "\x1b[K", 3);
         if(y < E.screenrows - 1)
